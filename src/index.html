@@ -6,17 +6,19 @@
     <script src="app.js"></script>
   </head>
   <body>
+    <div id="player"></div>
     <div id="elm"></div>
+
     <script>
       var app = Elm.Main.init({
         node: document.getElementById('elm')
       });
+
     </script>
 
 
 
     <!-- 1. the iframe and videoplayer will replace this div -->
-    <div id="player"></div>
 
     <script>
       // 2. This code loads the iframe player api async
@@ -55,6 +57,8 @@
 
       function onPlayerStateChange(event) {
         console.log(event);
+        console.log(event.data);
+        app.ports.player_status.send(event.data);
       }
 
       function stopVideo() {
