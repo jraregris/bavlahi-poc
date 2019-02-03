@@ -2,9 +2,12 @@ module Main exposing (main)
 
 import Browser
 import Html exposing (Html)
+import Json.Decode as D
+import Json.Encode exposing (Value)
 import YouTube
 import YouTube.API as API
 import YouTube.Status as Status exposing (Status(..))
+import YouTube.VideoData exposing (VideoData)
 
 
 main : Program () YouTube.Model Msg
@@ -19,7 +22,20 @@ main =
 
 view : YouTube.Model -> Html msg
 view model =
-    Html.div [] [ Html.text (Status.toString model.status) ]
+    Html.div []
+        [ renderTitle model.videoData
+        , Html.text (Status.toString model.status)
+        ]
+
+
+renderTitle : Maybe VideoData -> Html msg
+renderTitle mdata =
+    case mdata of
+        Nothing ->
+            Html.text ""
+
+        Just data ->
+            Html.h2 [] [ Html.text data.title ]
 
 
 init : flags -> ( YouTube.Model, Cmd msg )
@@ -42,11 +58,27 @@ update msg model =
                 Nothing ->
                     ( model, Cmd.none )
 
+        PlayerReady v ->
+            let
+                dataResult =
+                    D.decodeValue API.videoDataDecoder v
+            in
+            case dataResult of
+                Ok data ->
+                    ( { model | videoData = Just data }, Cmd.none )
+
+                Err _ ->
+                    ( { model | videoData = Nothing }, Cmd.none )
+
 
 subscriptions : model -> Sub Msg
 subscriptions _ =
-    API.onPlayerStateChange PlayerStateChange
+    Sub.batch
+        [ API.onPlayerStateChange PlayerStateChange
+        , API.onPlayerReady PlayerReady
+        ]
 
 
 type Msg
     = PlayerStateChange Int
+    | PlayerReady Value

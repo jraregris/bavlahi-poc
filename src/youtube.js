@@ -19,8 +19,8 @@ function onYouTubeIframeAPIReady() {
     });
 }
 
-function onPlayerReady(event) {
-    player.playVideo();
+function onPlayerReady(_event) {
+    app.ports.onPlayerReady.send(player.getVideoData());
 }
 
 function onPlayerStateChange(event) {
