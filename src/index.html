@@ -1,9 +1,20 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <title>Bavlahi Embedded Player PoC</title>
     <meta charset="utf-8"/>
+    <script src="app.js"></script>
   </head>
   <body>
+    <div id="elm"></div>
+    <script>
+      var app = Elm.Main.init({
+        node: document.getElementById('elm')
+      });
+    </script>
+
+
+
     <!-- 1. the iframe and videoplayer will replace this div -->
     <div id="player"></div>
 
@@ -41,13 +52,9 @@
       //    the function indicates when playing a video (state=1)
       //    the player should play for six seconds and then stop
 
-      var done = false;
 
       function onPlayerStateChange(event) {
-        if (event.data == YT.PlayerState.PLAYING && !done) {
-          setTimeout(stopVideo, 2000);
-          done = true;
-        }
+        console.log(event);
       }
 
       function stopVideo() {
