@@ -4,8 +4,8 @@
 <head>
   <title>Bavlahi Embedded Player PoC</title>
   <meta charset="utf-8" />
-  <script src="youtube.js"></script>
   <script src="app.js"></script>
+  <script src="youtube.js"></script>
 </head>
 
 <body>
@@ -17,6 +17,14 @@
       node: document.getElementById('elm')
     });
 
+
+    app.ports.loadVideoById.subscribe(function (data) {
+      player.loadVideoById({ videoId: data })
+    });
+
+    app.ports.getVideoData.subscribe(function (data) {
+      app.ports.setVideoData.send(player.getVideoData());
+    })
   </script>
 </body>
 

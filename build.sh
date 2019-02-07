@@ -5,7 +5,7 @@ rm out/youtube.js
 rm out/index.html
 
 # build elm
-elm make --debug src/Main.elm --output out/app.js
+elm make --optimize src/Main.elm --output out/app.js
 
 # copy javascript
 cp src/youtube.js out/

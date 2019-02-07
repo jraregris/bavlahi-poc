@@ -11,7 +11,6 @@ function onYouTubeIframeAPIReady() {
     player = new YT.Player('player', {
         height: '390',
         width: '640',
-        videoId: 'lOEOQ9ChRXc',
         events: {
             'onReady': onPlayerReady,
             'onStateChange': onPlayerStateChange
@@ -20,7 +19,7 @@ function onYouTubeIframeAPIReady() {
 }
 
 function onPlayerReady(_event) {
-    app.ports.onPlayerReady.send(player.getVideoData());
+    app.ports.onPlayerReady.send(null);
 }
 
 function onPlayerStateChange(event) {
