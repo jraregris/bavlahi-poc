@@ -8,6 +8,7 @@ import Json.Decode as D
 import Json.Encode exposing (Value)
 import YouTube
 import YouTube.API as API
+import YouTube.IdExtractor
 import YouTube.Status as Status exposing (Status(..))
 import YouTube.VideoData exposing (VideoData)
 
@@ -40,6 +41,8 @@ view model =
             ]
             []
         , Html.button [ Events.onClick LoadUrl ] [ Html.text "Load URL" ]
+        , Html.br [] []
+        , Html.text (Maybe.withDefault "" (YouTube.IdExtractor.extractVideoId model.inField))
         ]
 
 
@@ -120,10 +123,10 @@ update msg model =
                     ( { model | youtube = yt }, Cmd.none )
 
         ChangeUrl s ->
-            ( { model | urlField = s }, Cmd.none )
+            ( { model | inField = s }, Cmd.none )
 
         LoadUrl ->
-            ( model, API.loadVideoById model.urlField )
+            ( model, API.loadVideoById model.inField )
 
 
 subscriptions : model -> Sub Msg
